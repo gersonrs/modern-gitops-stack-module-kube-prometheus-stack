@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.7.0](https://github.com/GersonRS/modern-gitops-stack-module-kube-prometheus-stack/compare/v2.6.1...v2.7.0) (2026-01-26)
+
+
+### 🚀 New Features
+
+* adjust kubernetes revision ([d125d0e](https://github.com/GersonRS/modern-gitops-stack-module-kube-prometheus-stack/commit/d125d0eb3b5a1b0bbdf6088e1a85f8bba813aa14))
+* adjust the things ([f5fdc89](https://github.com/GersonRS/modern-gitops-stack-module-kube-prometheus-stack/commit/f5fdc8901f6818a585a0152315c89e807dfb0ac9))
+* adjust workflows ([5255725](https://github.com/GersonRS/modern-gitops-stack-module-kube-prometheus-stack/commit/5255725b4cc8d909c9a7ec971ab0710628087ec0))
+
+
+### ⌨️ Code Refactoring
+
+* adjust rul ingress ([d3668b0](https://github.com/GersonRS/modern-gitops-stack-module-kube-prometheus-stack/commit/d3668b0bab2ef3f2c527fdde5261898504b0df0c))
+
 ## [2.6.1](https://github.com/GersonRS/modern-gitops-stack-module-kube-prometheus-stack/compare/v2.6.0...v2.6.1) (2025-02-08)
 
 
