@@ -1,7 +1,7 @@
 locals {
   oauth2_proxy_image       = "quay.io/oauth2-proxy/oauth2-proxy:v7.6.0"
   curl_wait_for_oidc_image = "quay.io/curl/curl:8.10.1"
-  domain                   = trimprefix("${var.subdomain}.${var.base_domain}", ".")
+  domain                   = "${var.subdomain != "" ? "${trimprefix(var.subdomain, ".")}." : ""}${var.base_domain}"
   domain_full              = trimprefix("${var.subdomain}.${var.cluster_name}.${var.base_domain}", ".")
 
   ingress_annotations = {
@@ -175,15 +175,13 @@ locals {
           annotations = local.ingress_annotations
           servicePort = "9095"
           hosts = [
-            "${local.alertmanager.domain}",
-            "alertmanager.${local.domain}"
+            "${local.alertmanager.domain}"
           ]
           tls = [
             {
               secretName = "alertmanager-tls"
               hosts = [
-                "${local.alertmanager.domain}",
-                "alertmanager.${local.domain}",
+                "${local.alertmanager.domain}"
               ]
             },
           ]
@@ -260,15 +258,13 @@ locals {
           enabled     = true
           annotations = local.ingress_annotations
           hosts = [
-            "${local.grafana.domain}",
-            "grafana.${local.domain}",
+            "${local.grafana.domain}"
           ]
           tls = [
             {
               secretName = "grafana-tls"
               hosts = [
-                "${local.grafana.domain}",
-                "grafana.${local.domain}",
+                "${local.grafana.domain}"
               ]
             },
           ]
@@ -315,15 +311,13 @@ locals {
           annotations = local.ingress_annotations
           servicePort = "9091"
           hosts = [
-            "${local.prometheus.domain}",
-            "prometheus.${local.domain}",
+            "${local.prometheus.domain}"
           ]
           tls = [
             {
               secretName = "prometheus-tls"
               hosts = [
-                "${local.prometheus.domain}",
-                "prometheus.${local.domain}",
+                "${local.prometheus.domain}"
               ]
             },
           ]
