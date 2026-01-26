@@ -38,7 +38,7 @@ resource "argocd_project" "this" {
   }
 }
 
-resource "kubernetes_namespace" "kube_prometheus_stack_namespace" {
+resource "kubernetes_namespace_v1" "kube_prometheus_stack_namespace" {
   metadata {
     name = "kube-prometheus-stack"
   }
@@ -49,7 +49,7 @@ resource "kubernetes_namespace" "kube_prometheus_stack_namespace" {
 }
 
 
-resource "kubernetes_secret" "thanos_object_storage_secret" {
+resource "kubernetes_secret_v1" "thanos_object_storage_secret" {
   count = var.metrics_storage_main != null ? 1 : 0
 
   metadata {
@@ -63,7 +63,7 @@ resource "kubernetes_secret" "thanos_object_storage_secret" {
 
   depends_on = [
     resource.null_resource.dependencies,
-    resource.kubernetes_namespace.kube_prometheus_stack_namespace
+    resource.kubernetes_namespace_v1.kube_prometheus_stack_namespace
   ]
 }
 
@@ -139,7 +139,7 @@ resource "argocd_application" "this" {
       }
 
       sync_options = [
-        # Set to false because namespace is created by resource.kubernetes_namespace.kube_prometheus_stack_namespace
+        # Set to false because namespace is created by resource.kubernetes_namespace_v1.kube_prometheus_stack_namespace
         "CreateNamespace=false"
       ]
     }
@@ -147,8 +147,8 @@ resource "argocd_application" "this" {
 
   depends_on = [
     resource.null_resource.dependencies,
-    resource.kubernetes_secret.thanos_object_storage_secret,
-    resource.kubernetes_namespace.kube_prometheus_stack_namespace
+    resource.kubernetes_secret_v1.thanos_object_storage_secret,
+    resource.kubernetes_namespace_v1.kube_prometheus_stack_namespace
   ]
 }
 
