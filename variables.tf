@@ -216,6 +216,12 @@ variable "dataproxy_timeout" {
   default     = 30
 }
 
+variable "allowed_groups" {
+  description = "List of Keycloak groups allowed to access Grafana, Prometheus and Alertmanager. When empty, any authenticated user is allowed."
+  type        = list(string)
+  default     = []
+}
+
 variable "gateway_name" {
   description = "Name of the Istio Gateway resource to attach HTTPRoutes to."
   type        = string

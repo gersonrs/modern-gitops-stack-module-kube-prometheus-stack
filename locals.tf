@@ -156,7 +156,7 @@ locals {
                 "--cookie-secret=${replace(random_password.oauth2_cookie_secret.result, "\"", "\\\"")}",
                 "--email-domain=*",
                 "--redirect-url=https://${local.alertmanager.domain}/oauth2/callback",
-              ], local.alertmanager.oidc.oauth2_proxy_extra_args)
+              ], local.alertmanager.oidc.oauth2_proxy_extra_args, [for g in var.allowed_groups : "--allowed-group=${g}"])
             },
           ]
           resources = {
@@ -196,14 +196,15 @@ locals {
             allow_sign_up            = true
             client_id                = "${replace(local.grafana.oidc.client_id, "\"", "\\\"")}"
             client_secret            = "${replace(local.grafana.oidc.client_secret, "\"", "\\\"")}"
-            scopes                   = "openid profile email"
+            scopes                   = "openid profile email groups"
             auth_url                 = "${replace(local.grafana.oidc.oauth_url, "\"", "\\\"")}"
             token_url                = "${replace(local.grafana.oidc.token_url, "\"", "\\\"")}"
             api_url                  = "${replace(local.grafana.oidc.api_url, "\"", "\\\"")}"
             tls_skip_verify_insecure = var.cluster_issuer != "letsencrypt-prod"
-          }, local.grafana.generic_oauth_extra_args)
+            role_attribute_path      = "contains(groups[*], 'modern-gitops-stack-admins') && 'Admin' || contains(groups[*], 'modern-gitops-stack-editors') && 'Editor' || contains(groups[*], 'modern-gitops-stack-data-engineers') && 'Editor' || contains(groups[*], 'modern-gitops-stack-ml-engineers') && 'Editor' || 'Viewer'"
+          }, length(var.allowed_groups) > 0 ? { allowed_groups = join(",", var.allowed_groups) } : {}, local.grafana.generic_oauth_extra_args)
           users = {
-            auto_assign_org_role = "Editor"
+            auto_assign_org_role = "Viewer"
           }
           server = {
             domain   = "${local.grafana.domain}"
@@ -307,7 +308,7 @@ locals {
                 "--cookie-secret=${replace(random_password.oauth2_cookie_secret.result, "\"", "\\\"")}",
                 "--email-domain=*",
                 "--redirect-url=https://${local.prometheus.domain}/oauth2/callback",
-              ], local.prometheus.oidc.oauth2_proxy_extra_args)
+              ], local.prometheus.oidc.oauth2_proxy_extra_args, [for g in var.allowed_groups : "--allowed-group=${g}"])
               image     = local.oauth2_proxy_image
               name      = "prometheus-proxy"
               resources = local.oidc_proxy_resources
