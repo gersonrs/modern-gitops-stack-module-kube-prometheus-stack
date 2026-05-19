@@ -118,7 +118,7 @@ Description: Override of target revision of the application chart.
 
 Type: `string`
 
-Default: `"v2.7.0"`
+Default: `"v2.8.0"`
 
 ==== [[input_cluster_issuer]] <<input_cluster_issuer,cluster_issuer>>
 
@@ -320,6 +320,30 @@ Type: `number`
 
 Default: `30`
 
+==== [[input_allowed_groups]] <<input_allowed_groups,allowed_groups>>
+
+Description: List of Keycloak groups allowed to access Grafana, Prometheus and Alertmanager. When empty, any authenticated user is allowed.
+
+Type: `list(string)`
+
+Default: `[]`
+
+==== [[input_gateway_name]] <<input_gateway_name,gateway_name>>
+
+Description: Name of the Istio Gateway resource to attach HTTPRoutes to.
+
+Type: `string`
+
+Default: `"istio-gateway"`
+
+==== [[input_gateway_namespace]] <<input_gateway_namespace,gateway_namespace>>
+
+Description: Namespace where the Istio Gateway resource is deployed.
+
+Type: `string`
+
+Default: `"istio-ingress"`
+
 === Outputs
 
 The following outputs are exported:
@@ -433,7 +457,7 @@ object({
 |[[input_target_revision]] <<input_target_revision,target_revision>>
 |Override of target revision of the application chart.
 |`string`
-|`"v2.7.0"`
+|`"v2.8.0"`
 |no
 
 |[[input_cluster_issuer]] <<input_cluster_issuer,cluster_issuer>>
@@ -620,6 +644,24 @@ object({
 |Variable to set the time when a query times out. This applies to all the Grafana's data sources and can be manually configured per data source if desired.
 |`number`
 |`30`
+|no
+
+|[[input_allowed_groups]] <<input_allowed_groups,allowed_groups>>
+|List of Keycloak groups allowed to access Grafana, Prometheus and Alertmanager. When empty, any authenticated user is allowed.
+|`list(string)`
+|`[]`
+|no
+
+|[[input_gateway_name]] <<input_gateway_name,gateway_name>>
+|Name of the Istio Gateway resource to attach HTTPRoutes to.
+|`string`
+|`"istio-gateway"`
+|no
+
+|[[input_gateway_namespace]] <<input_gateway_namespace,gateway_namespace>>
+|Namespace where the Istio Gateway resource is deployed.
+|`string`
+|`"istio-ingress"`
 |no
 
 |===
