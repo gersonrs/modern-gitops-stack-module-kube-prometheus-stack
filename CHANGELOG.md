@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.8.0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v2.7.0...v2.8.0) (2026-05-19)
+
+
+### 🚀 New Features
+
+* add allowed_groups for RBAC via oauth2-proxy and Grafana OIDC ([5307ac0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/commit/5307ac0603a5acdf0478db11cff48bb40be89ab2))
+* migrate ingress from Traefik to Istio Gateway API HTTPRoute ([03d3abb](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/commit/03d3abb59ae1d0412b77d92145ff4fd15861de84))
+* migrate to Istio HTTPRoute, add allowed_groups RBAC and Grafana OIDC fix ([0dfe5db](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/commit/0dfe5dba9bd48bd45be2ea2320feed41f970a1f1))
+
 ## [2.7.0](https://github.com/GersonRS/modern-gitops-stack-module-kube-prometheus-stack/compare/v2.6.1...v2.7.0) (2026-01-26)
 
 
