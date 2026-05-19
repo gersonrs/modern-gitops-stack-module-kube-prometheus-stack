@@ -19,6 +19,8 @@ module "kube-prometheus-stack" {
   alertmanager = var.alertmanager
   grafana      = var.grafana
 
+  allowed_groups = var.allowed_groups
+
   metrics_storage_main = local.metrics_storage
 
   helm_values = concat(local.helm_values, var.helm_values)

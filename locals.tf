@@ -4,12 +4,6 @@ locals {
   domain                   = "${var.subdomain != "" ? "${trimprefix(var.subdomain, ".")}." : ""}${var.base_domain}"
   domain_full              = trimprefix("${var.subdomain}.${var.cluster_name}.${var.base_domain}", ".")
 
-  ingress_annotations = {
-    "cert-manager.io/cluster-issuer"                   = "${var.cluster_issuer}"
-    "traefik.ingress.kubernetes.io/router.entrypoints" = "websecure"
-    "traefik.ingress.kubernetes.io/router.tls"         = "true"
-  }
-
   oidc_proxy_resources = {
     requests = {
       cpu    = "20m"
@@ -154,15 +148,15 @@ locals {
               args = concat([
                 "--http-address=0.0.0.0:9095",
                 "--upstream=http://localhost:9093",
-                "--provider=oidc",
+                "--provider=keycloak-oidc",
                 "--oidc-issuer-url=${replace(local.alertmanager.oidc.issuer_url, "\"", "\\\"")}",
                 "--client-id=${replace(local.alertmanager.oidc.client_id, "\"", "\\\"")}",
                 "--client-secret=${replace(local.alertmanager.oidc.client_secret, "\"", "\\\"")}",
-                "--cookie-secure=false",
+                "--cookie-secure=true",
                 "--cookie-secret=${replace(random_password.oauth2_cookie_secret.result, "\"", "\\\"")}",
                 "--email-domain=*",
                 "--redirect-url=https://${local.alertmanager.domain}/oauth2/callback",
-              ], local.alertmanager.oidc.oauth2_proxy_extra_args)
+              ], local.alertmanager.oidc.oauth2_proxy_extra_args, [for g in var.allowed_groups : "--allowed-group=${g}"])
             },
           ]
           resources = {
@@ -171,20 +165,7 @@ locals {
           }
         }
         ingress = {
-          enabled     = true
-          annotations = local.ingress_annotations
-          servicePort = "9095"
-          hosts = [
-            "${local.alertmanager.domain}"
-          ]
-          tls = [
-            {
-              secretName = "alertmanager-tls"
-              hosts = [
-                "${local.alertmanager.domain}"
-              ]
-            },
-          ]
+          enabled = false
         }
         service = {
           additionalPorts = [
@@ -215,14 +196,15 @@ locals {
             allow_sign_up            = true
             client_id                = "${replace(local.grafana.oidc.client_id, "\"", "\\\"")}"
             client_secret            = "${replace(local.grafana.oidc.client_secret, "\"", "\\\"")}"
-            scopes                   = "openid profile email"
+            scopes                   = "openid profile email groups"
             auth_url                 = "${replace(local.grafana.oidc.oauth_url, "\"", "\\\"")}"
             token_url                = "${replace(local.grafana.oidc.token_url, "\"", "\\\"")}"
             api_url                  = "${replace(local.grafana.oidc.api_url, "\"", "\\\"")}"
             tls_skip_verify_insecure = var.cluster_issuer != "letsencrypt-prod"
-          }, local.grafana.generic_oauth_extra_args)
+            role_attribute_path      = "contains(groups[*], 'modern-gitops-stack-admins') && 'Admin' || contains(groups[*], 'modern-gitops-stack-editors') && 'Editor' || contains(groups[*], 'modern-gitops-stack-data-engineers') && 'Editor' || contains(groups[*], 'modern-gitops-stack-ml-engineers') && 'Editor' || 'Viewer'"
+          }, length(var.allowed_groups) > 0 ? { allowed_groups = join(",", var.allowed_groups) } : {}, local.grafana.generic_oauth_extra_args)
           users = {
-            auto_assign_org_role = "Editor"
+            auto_assign_org_role = "Viewer"
           }
           server = {
             domain   = "${local.grafana.domain}"
@@ -255,19 +237,7 @@ locals {
           }
         )]
         ingress = {
-          enabled     = true
-          annotations = local.ingress_annotations
-          hosts = [
-            "${local.grafana.domain}"
-          ]
-          tls = [
-            {
-              secretName = "grafana-tls"
-              hosts = [
-                "${local.grafana.domain}"
-              ]
-            },
-          ]
+          enabled = false
         }
         resources = {
           requests = { for k, v in var.resources.grafana.requests : k => v if v != null }
@@ -307,20 +277,7 @@ locals {
       )
       prometheus = merge(local.prometheus.enabled ? {
         ingress = {
-          enabled     = true
-          annotations = local.ingress_annotations
-          servicePort = "9091"
-          hosts = [
-            "${local.prometheus.domain}"
-          ]
-          tls = [
-            {
-              secretName = "prometheus-tls"
-              hosts = [
-                "${local.prometheus.domain}"
-              ]
-            },
-          ]
+          enabled = false
         }
         prometheusSpec = merge({
           initContainers = [
@@ -343,15 +300,15 @@ locals {
               args = concat([
                 "--http-address=0.0.0.0:9091",
                 "--upstream=http://localhost:9090",
-                "--provider=oidc",
+                "--provider=keycloak-oidc",
                 "--oidc-issuer-url=${replace(local.prometheus.oidc.issuer_url, "\"", "\\\"")}",
                 "--client-id=${replace(local.prometheus.oidc.client_id, "\"", "\\\"")}",
                 "--client-secret=${replace(local.prometheus.oidc.client_secret, "\"", "\\\"")}",
-                "--cookie-secure=false",
+                "--cookie-secure=true",
                 "--cookie-secret=${replace(random_password.oauth2_cookie_secret.result, "\"", "\\\"")}",
                 "--email-domain=*",
                 "--redirect-url=https://${local.prometheus.domain}/oauth2/callback",
-              ], local.prometheus.oidc.oauth2_proxy_extra_args)
+              ], local.prometheus.oidc.oauth2_proxy_extra_args, [for g in var.allowed_groups : "--allowed-group=${g}"])
               image     = local.oauth2_proxy_image
               name      = "prometheus-proxy"
               resources = local.oidc_proxy_resources
@@ -428,6 +385,20 @@ locals {
           limits   = { for k, v in var.resources.node_exporter.limits : k => v if v != null }
         }
       }
+    }
+  }]
+
+  helm_values_httproutes = [{
+    httproutes = {
+      enabled              = true
+      gateway_name         = var.gateway_name
+      gateway_namespace    = var.gateway_namespace
+      alertmanager_enabled = local.alertmanager.enabled
+      alertmanager_host    = local.alertmanager.domain
+      prometheus_enabled   = local.prometheus.enabled
+      prometheus_host      = local.prometheus.domain
+      grafana_enabled      = local.grafana.enabled
+      grafana_host         = local.grafana.domain
     }
   }]
 }
