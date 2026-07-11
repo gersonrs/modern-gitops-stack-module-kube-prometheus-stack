@@ -2,7 +2,6 @@ locals {
   oauth2_proxy_image       = "quay.io/oauth2-proxy/oauth2-proxy:v7.6.0"
   curl_wait_for_oidc_image = "quay.io/curl/curl:8.10.1"
   domain                   = "${var.subdomain != "" ? "${trimprefix(var.subdomain, ".")}." : ""}${var.base_domain}"
-  domain_full              = trimprefix("${var.subdomain}.${var.cluster_name}.${var.base_domain}", ".")
 
   oidc_proxy_resources = {
     requests = {
@@ -18,7 +17,7 @@ locals {
     enabled                  = true
     additional_data_sources  = false
     generic_oauth_extra_args = {}
-    domain                   = "grafana.${local.domain_full}"
+    domain                   = "grafana.${local.domain}"
     admin_password           = random_password.grafana_admin_password.result
   }
 
@@ -29,7 +28,7 @@ locals {
 
   prometheus_defaults = {
     enabled = true
-    domain  = "prometheus.${local.domain_full}"
+    domain  = "prometheus.${local.domain}"
   }
 
   prometheus = merge(
@@ -39,7 +38,7 @@ locals {
 
   alertmanager_defaults = {
     enabled            = true
-    domain             = "alertmanager.${local.domain_full}"
+    domain             = "alertmanager.${local.domain}"
     deadmanssnitch_url = null
     slack_routes       = []
   }
@@ -201,6 +200,7 @@ locals {
             token_url                = "${replace(local.grafana.oidc.token_url, "\"", "\\\"")}"
             api_url                  = "${replace(local.grafana.oidc.api_url, "\"", "\\\"")}"
             tls_skip_verify_insecure = var.cluster_issuer != "letsencrypt-prod"
+            groups_attribute_path    = "groups"
             role_attribute_path      = "contains(groups[*], 'modern-gitops-stack-admins') && 'Admin' || contains(groups[*], 'modern-gitops-stack-editors') && 'Editor' || contains(groups[*], 'modern-gitops-stack-data-engineers') && 'Editor' || contains(groups[*], 'modern-gitops-stack-ml-engineers') && 'Editor' || 'Viewer'"
           }, length(var.allowed_groups) > 0 ? { allowed_groups = join(",", var.allowed_groups) } : {}, local.grafana.generic_oauth_extra_args)
           users = {
