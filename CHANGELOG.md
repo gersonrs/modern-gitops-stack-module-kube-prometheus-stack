@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.9.0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v2.8.0...v2.9.0) (2026-07-11)
+
+
+### 🚀 New Features
+
+* adjust code ([5d29a25](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/commit/5d29a2573e9f3d24fb7f09e3fcdef735a11b684c))
+* adjust code ([f97db07](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/commit/f97db07e7490bf1fb522f9bde285ff095cab3dcf))
+
 ## [2.8.0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v2.7.0...v2.8.0) (2026-05-19)
 
 
