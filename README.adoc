@@ -38,13 +38,13 @@ The following requirements are needed by this module:
 
 The following providers are used by this module:
 
-- [[provider_argocd]] <<provider_argocd,argocd>> (7.15.3)
+- [[provider_random]] <<provider_random,random>> (3.9.0)
 
 - [[provider_kubernetes]] <<provider_kubernetes,kubernetes>> (3.2.1)
 
-- [[provider_random]] <<provider_random,random>> (3.9.0)
-
 - [[provider_utils]] <<provider_utils,utils>> (2.6.0)
+
+- [[provider_argocd]] <<provider_argocd,argocd>> (7.15.3)
 
 - [[provider_null]] <<provider_null,null>> (3.3.0)
 
@@ -383,10 +383,10 @@ Description: The admin password for Grafana.
 |===
 |Name |Version
 |[[provider_random]] <<provider_random,random>> |3.9.0
+|[[provider_null]] <<provider_null,null>> |3.3.0
+|[[provider_argocd]] <<provider_argocd,argocd>> |7.15.3
 |[[provider_kubernetes]] <<provider_kubernetes,kubernetes>> |3.2.1
 |[[provider_utils]] <<provider_utils,utils>> |2.6.0
-|[[provider_argocd]] <<provider_argocd,argocd>> |7.15.3
-|[[provider_null]] <<provider_null,null>> |3.3.0
 |===
 
 = Resources
