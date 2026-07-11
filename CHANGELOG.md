@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.10.0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v2.9.0...v2.10.0) (2026-07-11)
+
+
+### 🚀 New Features
+
+* add namespace_labels variable to all modules ([880d310](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/commit/880d3101c03d822e3805b59c84fdd978ee7d296c))
+* add namespace_labels variable to all modules ([633a0bb](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/commit/633a0bb44473efd67f2b5709a870bf4dbd77c896))
+
 ## [2.9.0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v2.8.0...v2.9.0) (2026-07-11)
 
 
