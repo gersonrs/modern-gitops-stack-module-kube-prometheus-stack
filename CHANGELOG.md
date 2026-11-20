@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v2.11.0...v3.0.0) (2026-11-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* provider major bumps and a stricter Terraform baseline; consumers must run `terraform init -upgrade`.
+
+### 🚀 New Features
+
+* upgrade charts, providers and Terraform baseline ([#27](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/issues/27)) ([a09f80f](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/commit/a09f80fa3f587be654215bc42984c5ede06a5d4b))
+
 ## [2.11.0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v2.10.0...v2.11.0) (2026-07-15)
 
 
