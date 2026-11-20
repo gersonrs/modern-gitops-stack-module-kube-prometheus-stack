@@ -3,15 +3,17 @@
 
 The following requirements are needed by this module:
 
-- [[requirement_argocd]] <<requirement_argocd,argocd>> (>= 6)
+- [[requirement_terraform]] <<requirement_terraform,terraform>> (>= 1.9.0)
 
-- [[requirement_kubernetes]] <<requirement_kubernetes,kubernetes>> (>= 2)
+- [[requirement_argocd]] <<requirement_argocd,argocd>> (~> 7.18)
 
-- [[requirement_null]] <<requirement_null,null>> (>= 3)
+- [[requirement_kubernetes]] <<requirement_kubernetes,kubernetes>> (~> 3.5)
 
-- [[requirement_random]] <<requirement_random,random>> (>= 3)
+- [[requirement_null]] <<requirement_null,null>> (~> 3.3)
 
-- [[requirement_utils]] <<requirement_utils,utils>> (>= 1)
+- [[requirement_random]] <<requirement_random,random>> (~> 3.9)
+
+- [[requirement_utils]] <<requirement_utils,utils>> (~> 2.7)
 
 === Modules
 
@@ -99,7 +101,7 @@ Description: Override of target revision of the application chart.
 
 Type: `string`
 
-Default: `"v2.11.0"`
+Default: `"v3.0.0"`
 
 ==== [[input_cluster_issuer]] <<input_cluster_issuer,cluster_issuer>>
 
@@ -357,11 +359,12 @@ Description: The admin password for Grafana.
 [cols="a,a",options="header,autowidth"]
 |===
 |Name |Version
-|[[requirement_argocd]] <<requirement_argocd,argocd>> |>= 6
-|[[requirement_kubernetes]] <<requirement_kubernetes,kubernetes>> |>= 2
-|[[requirement_null]] <<requirement_null,null>> |>= 3
-|[[requirement_random]] <<requirement_random,random>> |>= 3
-|[[requirement_utils]] <<requirement_utils,utils>> |>= 1
+|[[requirement_terraform]] <<requirement_terraform,terraform>> |>= 1.9.0
+|[[requirement_argocd]] <<requirement_argocd,argocd>> |~> 7.18
+|[[requirement_kubernetes]] <<requirement_kubernetes,kubernetes>> |~> 3.5
+|[[requirement_null]] <<requirement_null,null>> |~> 3.3
+|[[requirement_random]] <<requirement_random,random>> |~> 3.9
+|[[requirement_utils]] <<requirement_utils,utils>> |~> 2.7
 |===
 
 = Modules
@@ -434,7 +437,7 @@ object({
 |[[input_target_revision]] <<input_target_revision,target_revision>>
 |Override of target revision of the application chart.
 |`string`
-|`"v2.11.0"`
+|`"v3.0.0"`
 |no
 
 |[[input_cluster_issuer]] <<input_cluster_issuer,cluster_issuer>>
