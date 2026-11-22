@@ -1,33 +1,18 @@
 ---
-# Grafana dashboards rendered by this chart.
-#
-# core: always rendered. One per application deployed by examples/*/main.tf,
-# plus the stack-wide views. Argo CD is excluded because its own module ships
-# its dashboard.
-# optional: rendered only when listed, for applications from examples/*/apps.tf
-# that may not be deployed.
+# Stack-wide Grafana dashboards (stack-overview, cluster, workloads). Every
+# application dashboard is shipped by that application's own module.
 grafanaDashboards:
   folder: Modern GitOps Stack
-  core:
-    - stack-overview
-    - cluster
-    - workloads
-    - kube-prometheus-stack
-    - cert-manager
-    - metrics-server
-    - metallb
-    - istio
-    - kiali
-    - traefik
-    - keycloak
-    - postgresql
-    - minio
-    - loki
-    - thanos
-  optional: []
 
 # -- Values passed to the kube-prometheus-stack chart
 kube-prometheus-stack:
+
+  # The Prometheus Operator CRDs are installed by crds_bootstrap before any
+  # other module, so every application can enable its ServiceMonitor from the
+  # very first apply. Keeping them enabled here as well would create a second
+  # owner for the same objects.
+  crds:
+    enabled: false
 
   kubeControllerManager:
     enabled: false

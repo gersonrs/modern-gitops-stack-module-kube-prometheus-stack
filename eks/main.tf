@@ -74,5 +74,7 @@ module "kube-prometheus-stack" {
 
   metrics_storage_main = local.metrics_storage
 
+  grafana_dashboards_folder = var.grafana_dashboards_folder
+
   helm_values = concat(local.helm_values, var.helm_values)
 }
