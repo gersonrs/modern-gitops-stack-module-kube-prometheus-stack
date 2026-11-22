@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v3.2.0...v4.0.0) (2026-11-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* the operator jumps 19 minor versions and its CRDs change schema; consumers must run `terraform init -upgrade` and let the CRDs be reapplied before the operator rolls out.
+
+### 🚀 New Features
+
+* upgrade kube-prometheus-stack to 93.7.0 ([#33](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/issues/33)) ([1a8cc55](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/commit/1a8cc5595c2a67ce474c4caca2a7a1f46150721c))
+
 ## [3.2.0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v3.1.0...v3.2.0) (2026-11-22)
 
 
