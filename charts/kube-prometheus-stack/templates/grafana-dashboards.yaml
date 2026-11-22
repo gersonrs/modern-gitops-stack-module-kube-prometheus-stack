@@ -1,0 +1,43 @@
+{{- /*
+Renders the Grafana dashboard ConfigMaps for the Modern GitOps Stack.
+
+The Grafana dashboard sidecar watches ConfigMaps labelled
+grafana_dashboard=1 in all namespaces, so these are provisioned without any
+Grafana API call or restart.
+
+Two groups of dashboards exist:
+
+  core      Always rendered. One per application deployed by examples/<platform>/main.tf
+            plus the stack-wide views. kube-prometheus-stack is installed after
+            those applications, so their metrics and namespaces already exist.
+  optional  Rendered only when listed in .Values.grafanaDashboards.optional,
+            because the corresponding application comes from examples/<platform>/apps.tf
+            and may not be deployed.
+
+Rendering is deliberately NOT gated on any ServiceMonitor: the ConfigMap is
+harmless without metrics, and gating it forced a second `tofu apply` before
+the dashboards appeared. Panels that need exporter metrics stay empty until
+that ServiceMonitor is enabled.
+*/ -}}
+{{- $core := .Values.grafanaDashboards.core | default list -}}
+{{- $optional := .Values.grafanaDashboards.optional | default list -}}
+{{- $enabled := concat $core $optional -}}
+{{- if $enabled }}
+{{- $root := . -}}
+{{- range $path, $_ := .Files.Glob "dashboards/*.json" }}
+{{- $name := base $path | trimSuffix ".json" }}
+{{- if has $name $enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-dashboard-%s" $root.Release.Name $name | trunc 63 | trimSuffix "-" }}
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: {{ $root.Values.grafanaDashboards.folder | quote }}
+data:
+  {{ $name }}.json: {{ $root.Files.Get $path | fromJson | toJson | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
