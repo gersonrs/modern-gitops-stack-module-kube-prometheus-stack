@@ -23,9 +23,9 @@ variable "crds_chart_version" {
     are created here and the main chart skips them (`crds.enabled=false`), so a
     mismatch means the operator would run against an older schema.
 
-    Chart 14.0.0 ships the CRDs of Prometheus Operator v0.76.x, which is what
-    kube-prometheus-stack 62.7.0 bundles.
+    Chart 33.0.2 ships the CRDs of Prometheus Operator v0.95.2, which is what
+    kube-prometheus-stack 93.7.0 bundles.
   EOT
   type        = string
-  default     = "14.0.0"
+  default     = "33.0.2"
 }
