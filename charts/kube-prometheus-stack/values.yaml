@@ -1,4 +1,31 @@
 ---
+# Grafana dashboards rendered by this chart.
+#
+# core: always rendered. One per application deployed by examples/*/main.tf,
+# plus the stack-wide views. Argo CD is excluded because its own module ships
+# its dashboard.
+# optional: rendered only when listed, for applications from examples/*/apps.tf
+# that may not be deployed.
+grafanaDashboards:
+  folder: Modern GitOps Stack
+  core:
+    - stack-overview
+    - cluster
+    - workloads
+    - kube-prometheus-stack
+    - cert-manager
+    - metrics-server
+    - metallb
+    - istio
+    - kiali
+    - traefik
+    - keycloak
+    - postgresql
+    - minio
+    - loki
+    - thanos
+  optional: []
+
 # -- Values passed to the kube-prometheus-stack chart
 kube-prometheus-stack:
 

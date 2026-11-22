@@ -241,3 +241,23 @@ variable "gateway_namespace" {
   type        = string
   default     = "istio-ingress"
 }
+
+variable "grafana_dashboards_folder" {
+  description = "Grafana folder the shipped dashboards are created in."
+  type        = string
+  default     = "Modern GitOps Stack"
+}
+
+variable "grafana_dashboards_optional" {
+  description = <<-EOT
+    Optional Grafana dashboards to render in addition to the always-enabled
+    core ones. The core dashboards cover the applications from
+    `examples/<platform>/main.tf`; these cover the applications from
+    `examples/<platform>/apps.tf`, which are not always deployed.
+
+    Available: kafka, kafka-ui, schema-registry, zookeeper, nifi, pinot, trino,
+    spark, hive-metastore, kuberay, airflow, jupyterhub, mlflow, qdrant.
+  EOT
+  type        = list(string)
+  default     = []
+}
