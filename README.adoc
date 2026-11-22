@@ -88,13 +88,13 @@ The following requirements are needed by this module:
 
 The following providers are used by this module:
 
-- [[provider_random]] <<provider_random,random>> (3.9.1)
-
 - [[provider_null]] <<provider_null,null>> (3.3.2)
 
 - [[provider_argocd]] <<provider_argocd,argocd>> (7.18.0)
 
 - [[provider_kubernetes]] <<provider_kubernetes,kubernetes>> (3.5.0)
+
+- [[provider_random]] <<provider_random,random>> (3.9.1)
 
 - [[provider_utils]] <<provider_utils,utils>> (2.7.0)
 
@@ -170,7 +170,7 @@ Description: Override of target revision of the application chart.
 
 Type: `string`
 
-Default: `"v3.0.0"`
+Default: `"v3.1.0"`
 
 ==== [[input_cluster_issuer]] <<input_cluster_issuer,cluster_issuer>>
 
@@ -420,12 +420,12 @@ Default: `"Modern GitOps Stack"`
 
 ==== [[input_grafana_dashboards_optional]] <<input_grafana_dashboards_optional,grafana_dashboards_optional>>
 
-Description: Optional Grafana dashboards to render in addition to the always-enabled
+Description: Optional Grafana dashboards to render in addition to the always-enabled  
 core ones. The core dashboards cover the applications from
 `examples/<platform>/main.tf`; these cover the applications from
 `examples/<platform>/apps.tf`, which are not always deployed.
 
-Available: kafka, kafka-ui, schema-registry, zookeeper, nifi, pinot, trino,
+Available: kafka, kafka-ui, schema-registry, zookeeper, nifi, pinot, trino,  
 spark, hive-metastore, kuberay, airflow, jupyterhub, mlflow, qdrant.
 
 Type: `list(string)`
@@ -469,11 +469,11 @@ Description: The admin password for Grafana.
 [cols="a,a",options="header,autowidth"]
 |===
 |Name |Version
-|[[provider_random]] <<provider_random,random>> |3.9.1
-|[[provider_null]] <<provider_null,null>> |3.3.2
-|[[provider_argocd]] <<provider_argocd,argocd>> |7.18.0
 |[[provider_kubernetes]] <<provider_kubernetes,kubernetes>> |3.5.0
+|[[provider_random]] <<provider_random,random>> |3.9.1
 |[[provider_utils]] <<provider_utils,utils>> |2.7.0
+|[[provider_argocd]] <<provider_argocd,argocd>> |7.18.0
+|[[provider_null]] <<provider_null,null>> |3.3.2
 |===
 
 = Resources
@@ -536,7 +536,7 @@ Description: The admin password for Grafana.
 |[[input_target_revision]] <<input_target_revision,target_revision>>
 |Override of target revision of the application chart.
 |`string`
-|`"v3.0.0"`
+|`"v3.1.0"`
 |no
 
 |[[input_cluster_issuer]] <<input_cluster_issuer,cluster_issuer>>
