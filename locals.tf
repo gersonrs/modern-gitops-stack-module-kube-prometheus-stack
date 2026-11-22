@@ -13,28 +13,6 @@ locals {
     }
   }
 
-  # One dashboard per application deployed by examples/<platform>/main.tf, plus
-  # the stack-wide views. Argo CD is not listed because its own module ships
-  # its dashboard. These are always rendered: kube-prometheus-stack is
-  # installed after those applications, so their metrics already exist.
-  grafana_dashboards_core = [
-    "stack-overview",
-    "cluster",
-    "workloads",
-    "kube-prometheus-stack",
-    "cert-manager",
-    "metrics-server",
-    "metallb",
-    "istio",
-    "kiali",
-    "traefik",
-    "keycloak",
-    "postgresql",
-    "minio",
-    "loki",
-    "thanos",
-  ]
-
   grafana_defaults = {
     enabled                  = true
     additional_data_sources  = false
@@ -412,9 +390,7 @@ locals {
 
   helm_values_grafana_dashboards = [{
     grafanaDashboards = {
-      folder   = var.grafana_dashboards_folder
-      core     = local.grafana_dashboards_core
-      optional = var.grafana_dashboards_optional
+      folder = var.grafana_dashboards_folder
     }
   }]
 
