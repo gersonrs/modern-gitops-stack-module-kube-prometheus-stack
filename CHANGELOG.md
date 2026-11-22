@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v3.1.0...v3.2.0) (2026-11-22)
+
+
+### 🚀 New Features
+
+* add a CRD bootstrap so ServiceMonitors work on the first apply ([#31](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/issues/31)) ([1a7d989](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/commit/1a7d989590def2e2def9a62e2d078f1e56a03943))
+
 ## [3.1.0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v3.0.0...v3.1.0) (2026-11-22)
 
 
