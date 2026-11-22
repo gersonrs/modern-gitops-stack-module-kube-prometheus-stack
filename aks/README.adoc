@@ -123,7 +123,7 @@ Description: Override of target revision of the application chart.
 
 Type: `string`
 
-Default: `"v3.0.0"`
+Default: `"v3.1.0"`
 
 ==== [[input_cluster_issuer]] <<input_cluster_issuer,cluster_issuer>>
 
@@ -363,6 +363,28 @@ Type: `string`
 
 Default: `"istio-ingress"`
 
+==== [[input_grafana_dashboards_folder]] <<input_grafana_dashboards_folder,grafana_dashboards_folder>>
+
+Description: Grafana folder the shipped dashboards are created in.
+
+Type: `string`
+
+Default: `"Modern GitOps Stack"`
+
+==== [[input_grafana_dashboards_optional]] <<input_grafana_dashboards_optional,grafana_dashboards_optional>>
+
+Description: Optional Grafana dashboards to render in addition to the always-enabled  
+core ones. The core dashboards cover the applications from
+`examples/<platform>/main.tf`; these cover the applications from
+`examples/<platform>/apps.tf`, which are not always deployed.
+
+Available: kafka, kafka-ui, schema-registry, zookeeper, nifi, pinot, trino,  
+spark, hive-metastore, kuberay, airflow, jupyterhub, mlflow, qdrant.
+
+Type: `list(string)`
+
+Default: `[]`
+
 === Outputs
 
 The following outputs are exported:
@@ -483,7 +505,7 @@ object({
 |[[input_target_revision]] <<input_target_revision,target_revision>>
 |Override of target revision of the application chart.
 |`string`
-|`"v3.0.0"`
+|`"v3.1.0"`
 |no
 
 |[[input_cluster_issuer]] <<input_cluster_issuer,cluster_issuer>>
@@ -702,6 +724,25 @@ object({
 |Namespace where the Istio Gateway resource is deployed.
 |`string`
 |`"istio-ingress"`
+|no
+
+|[[input_grafana_dashboards_folder]] <<input_grafana_dashboards_folder,grafana_dashboards_folder>>
+|Grafana folder the shipped dashboards are created in.
+|`string`
+|`"Modern GitOps Stack"`
+|no
+
+|[[input_grafana_dashboards_optional]] <<input_grafana_dashboards_optional,grafana_dashboards_optional>>
+|Optional Grafana dashboards to render in addition to the always-enabled
+core ones. The core dashboards cover the applications from
+`examples/<platform>/main.tf`; these cover the applications from
+`examples/<platform>/apps.tf`, which are not always deployed.
+
+Available: kafka, kafka-ui, schema-registry, zookeeper, nifi, pinot, trino,
+spark, hive-metastore, kuberay, airflow, jupyterhub, mlflow, qdrant.
+
+|`list(string)`
+|`[]`
 |no
 
 |===

@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v3.0.0...v3.1.0) (2026-11-22)
+
+
+### 🚀 New Features
+
+* ship the Grafana dashboards for the stack ([#29](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/issues/29)) ([b264908](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/commit/b2649085de2a8036e2eed34a7b5ce68e3a8341c3))
+
 ## [3.0.0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v2.11.0...v3.0.0) (2026-11-20)
 
 
