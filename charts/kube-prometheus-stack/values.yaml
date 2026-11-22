@@ -27,10 +27,9 @@ kube-prometheus-stack:
     enabled: false
 
   prometheusOperator:
-    manageCrds: false
+    # manageCrds and tlsProxy were removed upstream: CRDs are owned by
+    # crds_bootstrap (crds.enabled=false below) and the TLS proxy is gone.
     tls:
-      enabled: false  # disable for now as I could not make it work
-    tlsProxy:
       enabled: false  # disable for now as I could not make it work
     admissionWebhooks:
       enabled: false  # disable for now as I could not make it work
@@ -44,8 +43,8 @@ kube-prometheus-stack:
   grafana:
     sidecar:
       dashboards:
+        # ALL is the upstream default in 93.x, kept explicit so the dashboards
+        # shipped by every module are still discovered across namespaces.
         searchNamespace: ALL
-      datasources:
-        searchNamespace: ALL
-    plugins:
-      - grafana-piechart-panel
+      # grafana.plugins was removed upstream; grafana-piechart-panel is bundled
+      # in Grafana 11+ and no longer needs to be installed.
