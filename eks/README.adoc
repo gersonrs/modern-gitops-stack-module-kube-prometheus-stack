@@ -1,3 +1,28 @@
+= modern-gitops-stack-module-kube-prometheus-stack :: eks
+
+This variant of the <<kube-prometheus-stack:ROOT:README.adoc[kube-prometheus-stack module]>> Deploys the stack on EKS and creates the IAM role that lets Thanos write to the S3 bucket.
+
+== Usage
+
+Declare the variant directly; it calls the module in the parent directory:
+
+[source,terraform]
+----
+module "kube-prometheus-stack" {
+  source = "git::https://github.com/GersonRS/modern-gitops-stack-module-kube-prometheus-stack.git//eks?ref=<RELEASE>"
+
+  cluster_name   = local.cluster_name
+  base_domain    = local.base_domain
+  subdomain      = local.subdomain
+  cluster_issuer = local.cluster_issuer
+  app_autosync   = local.app_autosync
+
+  dependency_ids = {
+    argocd = module.argocd_bootstrap.id
+  }
+}
+----
+
 // BEGIN_TF_DOCS
 === Requirements
 

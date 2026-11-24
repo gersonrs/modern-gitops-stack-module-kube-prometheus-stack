@@ -1,79 +1,68 @@
 = modern-gitops-stack-module-kube-prometheus-stack
 // Document attributes to replace along the document
-:kube-prometheus-stack-chart-version: 58.0.1
-:chart-url: https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack
+:kube-prometheus-stack-chart-version: 93.7.0
+:original-repo-url: https://github.com/prometheus-community/helm-charts
 
-A https://modern-gitops-stack.io[Modern GitOps Stack] module to deploy and configure https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack[kube-prometheus-chart].
+A https://modern-gitops-stack.io[Modern GitOps Stack] module to deploy Prometheus, Alertmanager and Grafana, together with the Prometheus Operator CRDs and the stack-wide dashboards.
 
 The kube-prometheus-stack chart used by this module is shipped in this repository as well, in order to avoid any unwanted behaviors caused by unsupported versions.
 
 [cols="1,1,1",options="autowidth,header"]
 |===
 |Current Chart Version |Original Repository |Default Values
-|*{kube-prometheus-stack-chart-version}* |{chart-url}[Chart] |https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack/{kube-prometheus-stack-chart-version}?modal=values[`values.yaml`]
+|*93.7.0* |https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack[kube-prometheus-stack] |https://artifacthub.io/packages/helm/kube-prometheus-stack/kube-prometheus-stack/93.7.0?modal=values[`values.yaml`]
 |===
 
-*Since this module is meant to be instantiated using its variants, the usage documentation is available in each variant* ( xref:./aks/README.adoc[AKS] | xref:./eks/README.adoc[EKS] | xref:./kind/README.adoc[KinD] ).
+== Usage
 
-Below you will only find the technical reference automatically generated from the `*.tf` files on the root module.
+This module can be declared by adding the following block to your Terraform configuration:
 
-== CRD bootstrap
-
-The Prometheus Operator CRDs (`ServiceMonitor`, `PodMonitor`, `PrometheusRule`,
-`Prometheus`, `Alertmanager`, `ThanosRuler`, ...) must exist before any module
-creates one of those objects.
-
-Without them, enabling `enable_service_monitor` on the first apply broke every
-application installed before `kube-prometheus-stack` — `cert-manager`, for
-example, failed because its `ServiceMonitor` had no CRD yet. That forced a two
-step deployment: apply with monitoring disabled, flip the flag, apply again.
-
-The `crds_bootstrap` variant solves this at the root. It installs the CRDs from
-the upstream `prometheus-operator-crds` chart before any other module, and the
-main chart runs with `crds.enabled=false`, so there is a single owner:
-
-[source,hcl]
+[source,terraform]
 ----
-module "crds_bootstrap" {
-  source = "git::https://github.com/GersonRS/modern-gitops-stack-module-kube-prometheus-stack.git//crds_bootstrap?ref=v3.2.0"
+module "kube-prometheus-stack" {
+  source = "git::https://github.com/GersonRS/modern-gitops-stack-module-kube-prometheus-stack.git?ref=<RELEASE>"
+
+  cluster_name   = local.cluster_name
+  base_domain    = local.base_domain
+  subdomain      = local.subdomain
+  cluster_issuer = local.cluster_issuer
+  app_autosync   = local.app_autosync
 
   dependency_ids = {
-    argocd = module.argocd_bootstrap.id
-  }
-}
-
-module "cert-manager" {
-  source = "git::https://github.com/GersonRS/modern-gitops-stack-module-cert-manager.git//self-signed?ref=v3.0.0"
-
-  enable_service_monitor = true   # safe from the first apply
-
-  dependency_ids = {
-    argocd         = module.argocd_bootstrap.id
+    istio          = module.istio.id
+    cert-manager   = module.cert-manager.id
+    minio          = module.minio.id
+    oidc           = module.oidc.id
     crds_bootstrap = module.crds_bootstrap.id
   }
 }
 ----
 
-WARNING: The `crds_chart_version` must stay aligned with the Prometheus Operator version bundled by the `kube-prometheus-stack` chart. Chart `14.0.0` ships the CRDs of operator v0.76.x, which is what kube-prometheus-stack 62.7.0 bundles. Bump both together.
+The application is deployed to the `kube-prometheus-stack` namespace.
 
-== Grafana dashboards
+== Technical Reference
 
-This chart ships the three stack-wide dashboards: `stack-overview`, `cluster`
-and `workloads`. Every application dashboard is shipped by that application's
-own module, so all modules follow the same pattern.
+=== Dependencies
 
-They are ConfigMaps labelled `grafana_dashboard=1`; the Grafana dashboard
-sidecar provisions them without any API call or restart:
+==== `module.istio.id`
 
-[source,hcl]
-----
-module "kube-prometheus-stack" {
-  # ...
-  grafana_dashboards_folder = "Modern GitOps Stack"   # default
-}
-----
+Grafana, Prometheus and Alertmanager are exposed through the Istio gateway.
 
-== Technical Documentation
+==== `module.cert-manager.id`
+
+The certificates are issued by cert-manager.
+
+==== `module.minio.id`
+
+Long-term metrics are shipped to the MinIO bucket through Thanos.
+
+==== `module.oidc.id`
+
+Grafana authenticates through Keycloak.
+
+==== `module.crds_bootstrap.id`
+
+The Prometheus Operator CRDs are owned by crds_bootstrap, so this module runs with crds.enabled=false.
 
 // BEGIN_TF_DOCS
 === Requirements
