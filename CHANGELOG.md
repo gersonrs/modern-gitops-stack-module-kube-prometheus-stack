@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.1](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v4.0.0...v4.0.1) (2026-11-24)
+
+
+### 📚 Documentation
+
+* add usage and dependencies to the module documentation ([#35](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/issues/35)) ([8ea21e7](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/commit/8ea21e7666f3108a6499b8d517cfa62129567429))
+
 ## [4.0.0](https://github.com/gersonrs/modern-gitops-stack-module-kube-prometheus-stack/compare/v3.2.0...v4.0.0) (2026-11-22)
 
 
